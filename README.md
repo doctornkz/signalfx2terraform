@@ -1,6 +1,4 @@
-# signalfx2terraform
-Command-line SignalFX exporter. Generates the terraform configuration from SignalFX API
-# SignalFX2Terraform (Beta)
+# SignalFX2Terraform 
 
 #### Simple converter hand-made dashboards to terraform configuration
 Inspired by Ricardo Silveira(OLX) and Luis Rodriges(OLX)
