@@ -15,7 +15,8 @@ After that application unpacks JSON to Signalfx objects with `signalfx-go` libra
 #### Usage:
 ```
 git clone  git@github.com:doctornkz/signalfx2terraform.git
-go build 
+cd signalfx2terraform
+go build
 ./signalfx2terraform --help
 Usage of ./signalfx2terraform:
   -dashboard string
