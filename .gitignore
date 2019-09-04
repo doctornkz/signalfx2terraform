@@ -1,2 +1,2 @@
-github.com
-golang.org
+vendor/
+signalfx2terraform
