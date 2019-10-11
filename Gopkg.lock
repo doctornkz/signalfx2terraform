@@ -29,7 +29,7 @@
   branch = "master"
   name = "github.com/hashicorp/hcl2"
   packages = ["hcl","hcl/hclsyntax","hclwrite"]
-  revision = "0c888d1241f6523caa75fd64dfcf8d3b610c77f9"
+  revision = "fb75b3253c80b3bc7ca99c4bfa2ad6743841b1af"
 
 [[projects]]
   name = "github.com/mitchellh/go-wordwrap"
@@ -40,14 +40,14 @@
 [[projects]]
   name = "github.com/signalfx/golib"
   packages = ["pointer"]
-  revision = "16be88e4953276ed2cc3bd97ea98338b1281c30b"
-  version = "v2.4.1"
+  revision = "8850415b2e2b0a5087ede7717c30b0ad1f6f4abd"
+  version = "v2.5.1"
 
 [[projects]]
   name = "github.com/signalfx/signalfx-go"
   packages = [".","chart","dashboard","dashboard_group","detector","idtool","integration","metrics_metadata","notification","organization","orgtoken","signalflow","signalflow/messages","team","util"]
-  revision = "7a7a5907b4017fcde9c1bcf9a37611765d2d857a"
-  version = "v1.6.1"
+  revision = "9b3b88211cab1e92d79ef43e33ffa3b310a27e0b"
+  version = "v1.6.4"
 
 [[projects]]
   name = "github.com/zclconf/go-cty"

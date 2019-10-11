@@ -79,11 +79,20 @@ func disableSamplingProc(chart *chart.Chart) cty.Value {
 }
 
 func colorRangeProc(chart *chart.Chart) cty.Value {
-	colorRange := chart.Options.ColorRange
 	attr := map[string]cty.Value{}
-	attr["color"] = cty.StringVal(colorRange.Color)
-	attr["min_value"] = cty.NumberFloatVal(colorRange.Min)
-	attr["max_value"] = cty.NumberFloatVal(colorRange.Max)
+	colorRange := chart.Options.ColorRange
+	if colorRange != nil {
+		if colorRange.Color == "" {
+			attr["color"] = cty.StringVal("#05ce00")
+		} else {
+			attr["color"] = cty.StringVal(colorRange.Color)
+		}
+
+		attr["min_value"] = cty.NumberFloatVal(colorRange.Min)
+		attr["max_value"] = cty.NumberFloatVal(colorRange.Max)
+	} else {
+		attr["color"] = cty.StringVal("#05ce00")
+	}
 	return cty.ObjectVal(attr)
 }
 
