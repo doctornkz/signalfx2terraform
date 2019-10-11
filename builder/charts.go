@@ -36,7 +36,11 @@ func HeatMapChart(f *hclwrite.File, chart *chart.Chart) *hclwrite.Body {
 	chartBody.SetAttributeValue("unit_prefix", cty.StringVal(chart.Options.UnitPrefix))
 	chartBody.SetAttributeValue("max_delay", cty.NumberIntVal(maxDelayProc(chart)))
 	chartBody.SetAttributeValue("group_by", groupByProc(chart))
-	chartBody.SetAttributeValue("color_scale", colorScale2Proc(chart))
+	if chart.Options.ColorBy == "Range" {
+		chartBody.SetAttributeValue("color_range", colorRangeProc(chart))
+	} else {
+		chartBody.SetAttributeValue("color_scale", colorScale2Proc(chart))
+	}
 	chartBody.SetAttributeValue("minimum_resolution", cty.NumberIntVal(minResolutionProc(chart)))
 	chartBody.SetAttributeValue("disable_sampling", disableSamplingProc(chart))
 	chartBody.SetAttributeValue("refresh_interval", cty.NumberIntVal(refreshIntervalProc(chart)))

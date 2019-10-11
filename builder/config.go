@@ -59,6 +59,33 @@ var vizcolor = struct {
 	},
 }
 
+/*
+var ChartColorsSlice = []chartColor{
+	{"gray", "#999999"},
+	{"blue", "#0077c2"},
+	{"light_blue", "#00b9ff"},
+	{"navy", "#6CA2B7"},
+	{"dark_orange", "#b04600"},
+	{"orange", "#f47e00"},
+	{"dark_yellow", "#e5b312"},
+	{"magenta", "#bd468d"},
+	{"cerise", "#e9008a"},
+	{"pink", "#ff8dd1"},
+	{"violet", "#876ff3"},
+	{"purple", "#a747ff"},
+	{"gray_blue", "#ab99bc"},
+	{"dark_green", "#007c1d"},
+	{"green", "#05ce00"},
+	{"aquamarine", "#0dba8f"},
+	{"red", "#ea1849"},
+	{"yellow", "#ea1849"},
+	{"vivid_yellow", "#ea1849"},
+	{"light_green", "#acef7f"},
+	{"lime_green", "#6bd37e"},
+}
+
+*/
+
 var t = struct {
 	types map[string]string
 }{
