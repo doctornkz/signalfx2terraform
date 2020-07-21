@@ -1,7 +1,0 @@
-{
-  "enabled": true,
-  "id": "string",
-  "name": "string",
-  "type": "VictorOps",
-  "postUrl": "https://www.example.com"
-}

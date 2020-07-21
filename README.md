@@ -1,4 +1,4 @@
-# SignalFX2Terraform 
+# SignalFX2Terraform
 
 #### Simple converter hand-made dashboards to terraform configuration
 Inspired by Ricardo Silveira(OLX) and Luis Rodriges(OLX)
@@ -11,13 +11,13 @@ Application based on generic libraries from Hashicorp and Signalfx team:
 [signalfx-go](https://github.com/signalfx/signalfx-go) - EXPERIMENTAL Go client library and instrumentation bindings for SignalFx
 
 Converter uses SignalFX API Token for fetching dashboard/detector data, see details here: [API Docs](https://developers.signalfx.com/basics/basics_overview.html).
-After that application unpacks JSON to Signalfx objects with `signalfx-go` library. We are using special `hclwriter` to convert objects to HashiCorp Language. Also we have ugly pack of wrappers for Type manipulation inside code. After `hclwriter` creates the terraform config file and fills it.      
+After that application unpacks JSON to Signalfx objects with `signalfx-go` library. We are using special `hclwriter` to convert objects to HashiCorp Language. Also we have ugly pack of wrappers for Type manipulation inside code. After `hclwriter` creates the terraform config file and fills it.
 #### Usage:
 ```
 git clone  git@github.com:doctornkz/signalfx2terraform.git
 cd signalfx2terraform
-go build
-./signalfx2terraform --help
+make build
+./bin/signalfx2terraform --help
 Usage of ./signalfx2terraform:
   -dashboard string
         Dashboard ID, without URL
@@ -26,7 +26,7 @@ Usage of ./signalfx2terraform:
   -token string
         SignalFX Token
 ```
-You need to use correct API Token and your dashboard or detector ID. These IDs presented as part SignalFX's URL. 
+You need to use correct API Token and your dashboard or detector ID. These IDs presented as part SignalFX's URL.
 Like that:\
 `https://<REALM>.signalfx.com/#/dashboard/DxuFENBAAJI` > `DxuFENBAAJI`\
 or\
@@ -65,11 +65,11 @@ You can reorder STDOUT to file for editing, checking or passing with terraform.
  - Work in progress, now covered only 40% of documented functionality, but people never use even 60%
  - Dashboard name renamed to `test-<Dashboard Name>`. It's hardcoded to prevent destroying original dashboard. The same with detectors.
  - Converter knows nothing about guidlines, vars, tags, etc. It gives you only Raw dashboard ot detector configuration.
- - Detectors v1 (handmade) badly JSON-structured, after exporting, please, check configuration (and fix if it needed). 
+ - Detectors v1 (handmade) badly JSON-structured, after exporting, please, check configuration (and fix if it needed).
 
-### TODO: 
+### TODO:
  - Cover ~90% functionality
- - Tests 
+ - Tests
  - Simplify code
 
 ### Help:
