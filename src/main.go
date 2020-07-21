@@ -7,7 +7,7 @@ import (
    "os"
 
    "github.com/urfave/cli/v2"
-	"git.naspersclassifieds.com/infrastructure/verticals/signalfx2terraform/src/handler"
+	"github.com/doctornkz/signalfx2terraform/src/handler"
 )
 
 var (

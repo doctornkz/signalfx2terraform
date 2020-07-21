@@ -1,4 +1,4 @@
-module git.naspersclassifieds.com/infrastructure/verticals/signalfx2terraform
+module github.com/doctornkz/signalfx2terraform
 
 go 1.14
 

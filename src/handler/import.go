@@ -7,13 +7,13 @@ import (
    "github.com/signalfx/signalfx-go"
    "github.com/urfave/cli/v2"
 
-   "git.naspersclassifieds.com/infrastructure/verticals/signalfx2terraform/src/utils"
-   "git.naspersclassifieds.com/infrastructure/verticals/signalfx2terraform/src/detectors"
-   "git.naspersclassifieds.com/infrastructure/verticals/signalfx2terraform/src/timeseries"
-   "git.naspersclassifieds.com/infrastructure/verticals/signalfx2terraform/src/list"
-   "git.naspersclassifieds.com/infrastructure/verticals/signalfx2terraform/src/heatmap"
-   "git.naspersclassifieds.com/infrastructure/verticals/signalfx2terraform/src/singlevalue"
-   "git.naspersclassifieds.com/infrastructure/verticals/signalfx2terraform/src/text"
+   "github.com/doctornkz/signalfx2terraform/src/utils"
+   "github.com/doctornkz/signalfx2terraform/src/detectors"
+   "github.com/doctornkz/signalfx2terraform/src/timeseries"
+   "github.com/doctornkz/signalfx2terraform/src/list"
+   "github.com/doctornkz/signalfx2terraform/src/heatmap"
+   "github.com/doctornkz/signalfx2terraform/src/singlevalue"
+   "github.com/doctornkz/signalfx2terraform/src/text"
 )
 
 const (

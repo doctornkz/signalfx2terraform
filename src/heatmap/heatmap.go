@@ -1,7 +1,7 @@
 package heatmap
 
 import (
-	"git.naspersclassifieds.com/infrastructure/verticals/signalfx2terraform/src/utils"
+	"github.com/doctornkz/signalfx2terraform/src/utils"
 
 	"github.com/hashicorp/hcl2/hcl"
 	"github.com/hashicorp/hcl2/hclwrite"
