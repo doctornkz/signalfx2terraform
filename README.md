@@ -133,7 +133,7 @@ Then go to your browser to `http://localhost:8080/`.
 To import the SFX resources and visualize it in this webserver, grab your SFX resource and change the it like this:
 
 - from: `https://signalfx.com/#/dashboard/`
-- to:   `http://localhost:8080/#/dashboard/`
+- to:   `http://localhost:8080/dashboard/` **NOTE:** Remove also the `#` char
 
 ### You should know:
  - Work in progress, now covered only 70% of documented functionality
