@@ -35,7 +35,7 @@ FOLDER_BIN = $(CURDIR)/bin
 ### COMMANDS
 all: build
 
-ship: clean mod build-static install
+ship: clean mod install
 
 ## Display this help screen
 help:
@@ -48,7 +48,7 @@ $(FOLDER_REPORT):
 	$(MKDIR_P) $@
 
 ## Vet examines Go source code and reports suspicious constructs, such as Printf calls whose arguments do not align with the format string
-vet:
+vet: ## Clean up golang modules
 	go vet ./...
 
 clean: ## Remove previous build

@@ -7,14 +7,14 @@ import (
    "os"
 
    "github.com/urfave/cli/v2"
-	"github.com/doctornkz/signalfx2terraform/src/handler"
+   "github.com/doctornkz/signalfx2terraform/src/handler"
 )
 
 var (
-	signalfxAPIToken string
-	dashboardID      string
-	detectorID       string
-	version          string
+   signalfxAPIToken string
+   dashboardID      string
+   detectorID       string
+   version          string
 )
 
 
@@ -59,17 +59,25 @@ func main() {
                  Usage: "Webserver port to bind",
                  Value: 8080,
                  DefaultText: "8080",
+                 EnvVars: []string{"PORT"},
                },
                &cli.StringFlag{
-                  Name: "address",
-                  Aliases: []string{"a"},
-                  Usage: "Webserver address to use",
-                  Value: "localhost",
-                  DefaultText: "localhost",
+                 Name: "address",
+                 Aliases: []string{"a"},
+                 Usage: "Webserver address to use",
+                 Value: "localhost",
+                 DefaultText: "localhost",
+                 EnvVars: []string{"ADDRESS"},
+               },
+               &cli.StringFlag{
+                 Name: "token",
+                 Aliases: []string{"t"},
+                 Usage: "Signalfx token",
+                 EnvVars: []string{"SIGNALFX_TOKEN"},
                },
             },
             Action: func(c *cli.Context) error {
-               handler.Webserver()
+               handler.Webserver(c)
                return nil
             },
          },
