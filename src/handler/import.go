@@ -17,31 +17,33 @@ import (
 )
 
 const (
-	// APIURL : default entrypoint for customer's requests
-	APIURL = "https://api.eu0.signalfx.com"
+   // APIURL : default entrypoint for customer's requests
+   APIURL = "https://api.eu0.signalfx.com"
 )
 
+// Import - import signalfx resource
 func Import(c *cli.Context){
    token := c.String("token")
 
    if c.IsSet("dashboard") {
       if dId := c.String("dashboard"); dId != "" {
-         dashboardProcessor(dId, token)
+         fmt.Printf("%s",dashboardProcessor(dId, token))
       } else {
          log.Fatal("Dashboard Id not specified")
       }
    }
 
    if c.IsSet("detector") {
-      if dId := c.String("dashboard"); dId != "" {
-         detectorProcessor(dId, token)
+      if dId := c.String("detector"); dId != "" {
+         fmt.Printf("%s",detectorProcessor(dId, token))
       } else {
          log.Fatal("Detector Id not specified")
       }
    }
 }
 
-func dashboardProcessor(d string, t string) {
+// dashboardProcessor - process dashboard import
+func dashboardProcessor(d string, t string) []byte {
 
    client, err := signalfx.NewClient(t, signalfx.APIUrl(APIURL))
 
@@ -62,6 +64,7 @@ func dashboardProcessor(d string, t string) {
 
    for _, v := range charts {
       chart, err := client.GetChart(v.ChartId)
+
       if err != nil {
          log.Printf("Chart error: %v", err)
          log.Fatal("Can't get chart")
@@ -70,45 +73,47 @@ func dashboardProcessor(d string, t string) {
       switch types := chart.Options.Type; types {
       case "SingleValue":
          singlevalue.Chart(f, chart)
-
       case "Heatmap":
          heatmap.Chart(f, chart)
-
       case "TimeSeriesChart":
          timeseries.Chart(f, chart)
-
       case "List":
          list.Chart(f, chart)
 
       case "Text":
          text.Chart(f, chart)
-
       default:
          continue
       }
 
    }
-   fmt.Printf("%s", f.Bytes())
+   return f.Bytes()
 }
 
-func detectorProcessor(d string, t string) {
+// detectorProcessor - process detector import
+func detectorProcessor(d string, t string) []byte {
    client, err := signalfx.NewClient(t, signalfx.APIUrl(APIURL))
+
    if err != nil {
       log.Fatal("Something wrong with API client")
    }
+
    detector, err := client.GetDetector(d)
+
    if err != nil {
       // Failover for V1 detector
       // TODO: Implement reliable check
       //log.Printf("Detector error: %v", err)
       //log.Println("Can't fetch detector with V2 API, trying failover method...")
       f := hclwrite.NewEmptyFile()
-      detectors.CreateDetectorV1(f, APIURL, d, t)
-      fmt.Printf("%s", f.Bytes())
 
+      detectors.CreateDetectorV1(f, APIURL, d, t)
+
+      return f.Bytes()
    } else {
       f := hclwrite.NewEmptyFile()
       detectors.CreateDetector(f, detector)
-      fmt.Printf("%s", f.Bytes())
+
+      return f.Bytes()
    }
 }
