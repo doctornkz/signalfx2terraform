@@ -34,7 +34,7 @@ GLOBAL OPTIONS:
 ```
 
 ###### Legend
-`import` - use this subcommand to import SFX resources
+`import` - use this subcommand to import SFX resources\
 `webserver` - will create a local webserver for you to see the terraform file
 
 #### Import
@@ -57,12 +57,9 @@ OPTIONS:
 
 You need to use correct SFX API Token and your dashboard or detector ID. These IDs presented as part SFX URL.
 
-Like that:
-
-`https://<REALM>.signalfx.com/#/dashboard/DxuFENBAAJI` > `DxuFENBAAJI`
-
-or
-
+Like that:\
+`https://<REALM>.signalfx.com/#/dashboard/DxuFENBAAJI` > `DxuFENBAAJI`\
+or\
 `https://REALM.signalfx.com/#/detector/v2/D-9Usa2AIAA/` > `D-9Usa2AIAA`
 
 Run command with parameters:
