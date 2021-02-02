@@ -1,10 +1,10 @@
 package utils
 
 import (
+   "encoding/json"
    "fmt"
    "log"
    "strconv"
-   "encoding/json"
 
    "github.com/hashicorp/hcl2/hcl"
    "github.com/hashicorp/hcl2/hclwrite"
@@ -19,7 +19,7 @@ import (
 
 // LabelProc ...
 func LabelProc(name string) string {
-   return fmt.Sprintf("sfx-%s", name)
+   return fmt.Sprintf("sfx_%s", name)
 
 }
 
@@ -109,11 +109,11 @@ func ColorRangeProc(c *chart.Chart, cb *hclwrite.Body) {
    s := make(map[string]interface{})
    json.Unmarshal(js, &s)
 
-   setAttributeOptions(cb, s, "color_range")
+   setAttributeOptions(cb, s, "color_range", c.Options.Type)
 }
 
 // ColorScale2Proc - create color_scale body
-func ColorScale2Proc(c *chart.Chart, cb *hclwrite.Body, color map[int32]string) {
+func ColorScale2Proc(c *chart.Chart, cb *hclwrite.Body) {
    for _, f := range c.Options.ColorScale2 {
       sv := SecondaryVisualization{}
       sv.Gt = f.Gt
@@ -132,7 +132,7 @@ func ColorScale2Proc(c *chart.Chart, cb *hclwrite.Body, color map[int32]string) 
       s := make(map[string]interface{})
       json.Unmarshal(js, &s)
 
-      setAttributeOptions(cb, s, "color_scale")
+      setAttributeOptions(cb, s, "color_scale", c.Options.Type)
    }
 }
 
@@ -172,26 +172,6 @@ func DensityProc(density *dashboard.DashboardChartDensity) cty.Value {
    }
 
    return cty.StringVal("default")
-}
-
-// SeverityProc ...
-func SeverityProc(rule detector.Rule) cty.Value {
-
-   switch rule.Severity {
-   case detector.CRITICAL:
-      return cty.StringVal("Critical")
-
-   case detector.WARNING:
-      return cty.StringVal("Warning")
-
-   case detector.MAJOR:
-      return cty.StringVal("Major")
-
-   case detector.MINOR:
-      return cty.StringVal("Minor")
-   }
-
-   return cty.StringVal("Info")
 }
 
 // NotificationProc ...
@@ -308,12 +288,12 @@ func OnChartLegendProc(chart *chart.Chart) cty.Value {
       dimensionInLegend := chart.Options.OnChartLegendOptions.DimensionInLegend
 
       /* Two specific cases:
-      https://www.terraform.io/docs/providers/signalfx/r/time_chart.html
-         * `property` The name of the property to display.
-         Note the special values of `plot_label` (corresponding with the API's `sf_metric`)
-         which shows the label of the time series `publish()` and
-         `metric` (corresponding with the API's `sf_originatingMetric`)
-         that shows the name of the metric for the time series being displayed
+         https://www.terraform.io/docs/providers/signalfx/r/time_chart.html
+            * `property` The name of the property to display.
+            Note the special values of `plot_label` (corresponding with the API's `sf_metric`)
+            which shows the label of the time series `publish()` and
+            `metric` (corresponding with the API's `sf_originatingMetric`)
+            that shows the name of the metric for the time series being displayed
       */
 
       if dimensionInLegend == "sf_metric" {
@@ -345,53 +325,6 @@ func LegendShowProc(chart *chart.Chart) cty.Value {
    return cty.TupleVal(valueList)
 }
 
-// VizProc ...
-func VizProc(chart *chart.Chart) cty.Value {
-   var valueList []cty.Value
-   if len(chart.Options.PublishLabelOptions) == 0 && len(chart.Options.EventPublishLabelOptions) == 0 {
-      return cty.ListValEmpty(cty.String)
-   }
-
-   /* Processing data label, like
-   A = data('gitlab.deployment', filter=filter('application_name', 'carspt') and \
-   filter('status', 'succeed'), rollup='sum').publish(label='A')
-   */
-
-   for _, v := range chart.Options.PublishLabelOptions {
-      attr := map[string]cty.Value{}
-      attr["display_name"] = cty.StringVal(v.DisplayName)
-      attr["label"] = cty.StringVal(v.Label)
-      // FIXME: Ugly hack here, 0 not null!
-      if v.PaletteIndex != nil {
-         attr["color"] = cty.StringVal(Color[*v.PaletteIndex])
-      }
-
-      /*
-       Specifies the position of the Y-axis for the plot associated with the SignalFlow statement.
-       If `yAxis` is set to 0, the axis is on the left side; otherwise it's on the right.
-       The default is 0 (left side).<br> **Note** -- This option is only available if 'options.type`
-       is `TimeSeriesChart`, `List`, or `SingleValue`.
-      */
-      if v.YAxis != 0 { // Empty field not allowed
-         attr["axis"] = cty.StringVal("right")
-      }
-
-      if v.PlotType != "" { // Empty string not allowed
-         attr["plot_type"] = cty.StringVal(v.PlotType)
-      }
-      if v.ValueUnit != "" { // Empty string not allowed
-         attr["value_unit"] = cty.StringVal(v.ValueUnit)
-      }
-      attr["value_prefix"] = cty.StringVal(v.ValuePrefix)
-      attr["value_suffix"] = cty.StringVal(v.ValueSuffix)
-
-      ctyV := cty.ObjectVal(attr)
-      valueList = append(valueList, ctyV)
-
-   }
-   return cty.TupleVal(valueList)
-}
-
 // EventProc - create event_options body
 func EventProc(c *chart.Chart, cb *hclwrite.Body) {
    // assign all options available
@@ -399,8 +332,8 @@ func EventProc(c *chart.Chart, cb *hclwrite.Body) {
    if c.Options.EventPublishLabelOptions != nil {
       for _, f := range c.Options.EventPublishLabelOptions {
          e := EventPublishLabelOptions{}
-         e.DisplayName  = f.DisplayName
-         e.Label        = f.Label
+         e.DisplayName = f.DisplayName
+         e.Label = f.Label
          e.PaletteIndex = f.PaletteIndex
 
          // marshal structure to json strings
@@ -414,7 +347,7 @@ func EventProc(c *chart.Chart, cb *hclwrite.Body) {
          s := make(map[string]interface{})
          json.Unmarshal(js, &s)
 
-         setAttributeOptions(cb, s, "event_options")
+         setAttributeOptions(cb, s, "event_options", c.Options.Type)
       }
    }
 }
@@ -528,7 +461,7 @@ func CreateDashboard(f *hclwrite.File, dashboard *dashboard.Dashboard, client *s
 }
 
 // GetVizOptions - create viz_options body
-func GetVizOptions(c *chart.Chart, cb *hclwrite.Body){
+func GetVizOptions(c *chart.Chart, cb *hclwrite.Body) {
 
    // assign all options available
    // if no options it wont panic, structure uses `omitempty`
@@ -555,35 +488,51 @@ func GetVizOptions(c *chart.Chart, cb *hclwrite.Body){
          s := make(map[string]interface{})
          json.Unmarshal(js, &s)
 
-         setAttributeOptions(cb, s, "viz_options")
+         setAttributeOptions(cb, s, "viz_options", f.PlotType)
       }
    }
 }
 
 // setAttributeOptions - fill Chart Body with attributes
-func setAttributeOptions(cb *hclwrite.Body, s map[string]interface{}, name string) {
+func setAttributeOptions(cb *hclwrite.Body, s map[string]interface{}, name string, ct string) {
    b := cb.AppendNewBlock(name, nil)
    bc := b.Body()
 
    // range over interface and create the viz_options
    // change the type of cty accordingly
    for k, v := range s {
-      switch v.(type){
-         case float64:
-            if k == "color"{
-               c := OptionsColor[int32(v.(float64))]
-               bc.SetAttributeValue(k, cty.StringVal(c))
-            } else {
-               bc.SetAttributeValue(k, cty.NumberFloatVal(v.(float64)))
+      switch v.(type) {
+      case float64:
+         if k == "color" {
+            // TOFIX: heatmap color_range uses exadecimal
+            // default to use this color pallete
+            c := OptionsColor[int32(v.(float64))]
+            if ct == "Heatmap" || ct == "SingleValue" || ct == "List" {
+               // will override only for color_scale
+               // it uses different color pallete
+               c = ColorScalePallete[int32(v.(float64))]
             }
-         case string:
-            bc.SetAttributeValue(k, cty.StringVal(v.(string)))
+
+            bc.SetAttributeValue(k, cty.StringVal(c))
+         } else {
+            bc.SetAttributeValue(k, cty.NumberFloatVal(v.(float64)))
+         }
+
+         if k == "axis" {
+            if v.(float64) == 1 {
+               bc.SetAttributeValue(k, cty.StringVal("right"))
+            } else {
+               bc.SetAttributeValue(k, cty.StringVal("left"))
+            }
+         }
+      case string:
+         bc.SetAttributeValue(k, cty.StringVal(v.(string)))
       }
    }
 }
 
 // GetLegendOptionsBlock - create legend_options_fields body
-func GetLegendOptionsBlock(c *chart.Chart, cb *hclwrite.Body){
+func GetLegendOptionsBlock(c *chart.Chart, cb *hclwrite.Body) {
    legend := &hclwrite.Block{}
    if c.Options.LegendOptions != nil {
       for _, field := range c.Options.LegendOptions.Fields {

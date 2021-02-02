@@ -20,5 +20,6 @@ require (
 	github.com/signalfx/signalfx-go v1.6.4
 	github.com/urfave/cli/v2 v2.2.0
 	github.com/zclconf/go-cty v1.1.0
+	go.uber.org/zap v1.15.0 // indirect
 	golang.org/x/text v0.3.2 // indirect
 )
