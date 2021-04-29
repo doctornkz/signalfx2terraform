@@ -113,7 +113,12 @@ func ColorRangeProc(c *chart.Chart, cb *hclwrite.Body) {
 	cr.Color = colorRange.Color
 	cr.Max = colorRange.Max
 	cr.Min = colorRange.Min
-
+	
+	// default color range settings, empty structure is not allowed
+	if colorRange.Color == "" {
+		cr.Color = "#05ce00" // Green scale pattern
+	}
+	
 	js, err := json.Marshal(cr)
 	if err != nil {
 		log.Fatal("Cannot marshal SecondaryVisualization{} structure", err)
